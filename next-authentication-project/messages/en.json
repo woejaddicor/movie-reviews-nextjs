@@ -1,0 +1,66 @@
+{
+  "nav": {
+    "home": "Home",
+    "dashboard": "Dashboard",
+    "profile": "Profile",
+    "account": "Account",
+    "logout": "Logout",
+    "darkMode": "Dark Mode",
+    "lightMode": "Light Mode"
+  },
+  "auth": {
+    "login": "Login",
+    "signup": "Sign Up",
+    "email": "Email",
+    "password": "Password",
+    "emailPlaceholder": "Enter your email",
+    "passwordPlaceholder": "Enter your password",
+    "rememberMe": "Remember me",
+    "forgotPassword": "Forgot password?",
+    "noAccount": "Don't have an account?",
+    "haveAccount": "Already have an account?",
+    "errors": {
+      "invalidEmail": "Please enter a valid email address.",
+      "passwordTooShort": "Please enter a valid password (at least 8 characters).",
+      "emailExists": "This email address is already registered.",
+      "noAccount": "No account found with this email address.",
+      "incorrectPassword": "The password is incorrect.",
+      "unauthorized": "Unauthorized!"
+    }
+  },
+  "profile": {
+    "title": "My Profile",
+    "fullName": "Full Name",
+    "namePlaceholder": "Enter your name",
+    "email": "Email",
+    "emailCannotChange": "Email cannot be changed",
+    "bio": "Bio",
+    "bioPlaceholder": "Tell us about yourself...",
+    "editProfile": "Edit Profile",
+    "saveChanges": "Save Changes",
+    "cancel": "Cancel",
+    "memberSince": "Member since",
+    "noNameSet": "No name set",
+    "success": "Profile updated successfully!",
+    "errors": {
+      "notAuthenticated": "Not authenticated",
+      "nameRequired": "Name is required",
+      "nameTooLong": "Name must be less than 100 characters",
+      "bioTooLong": "Bio must be less than 500 characters",
+      "updateFailed": "Failed to update profile",
+      "unexpectedError": "An error occurred while updating profile"
+    }
+  },
+  "training": {
+    "title": "Find your favorite activity"
+  },
+  "common": {
+    "loading": "Loading...",
+    "save": "Save",
+    "cancel": "Cancel",
+    "edit": "Edit",
+    "delete": "Delete",
+    "confirm": "Confirm",
+    "back": "Back"
+  }
+}
