@@ -1,5 +1,3 @@
-import Link from "next/link";
-
 interface EmptyStateProps {
   title: string;
   message: string;
@@ -18,9 +16,6 @@ export default function EmptyState({
       <p className="text-white/70 [html[data-theme='light']_&]:text-gray-600 text-lg mb-4">
         {message}
       </p>
-      <Link href={actionHref} className="btn-primary inline-block">
-        {actionLabel}
-      </Link>
     </div>
   );
 }

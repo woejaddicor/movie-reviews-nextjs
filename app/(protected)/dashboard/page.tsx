@@ -119,6 +119,9 @@ export default async function DashboardPage() {
 
       <div className="card">
         <div className="flex justify-between items-center mb-6">
+            <Link href="/profile" className="btn-primary-sm">
+            Edit Profile
+          </Link>
           <h2 className="text-2xl font-bold [html[data-theme='light']_&]:text-gray-900">
             Your Reviews
           </h2>
