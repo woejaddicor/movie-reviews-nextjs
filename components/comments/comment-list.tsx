@@ -24,10 +24,12 @@ export default function CommentList({
     );
   }
 
+  const currentUserIdNumber = Number(currentUserId);
+
   return (
     <div className="space-y-4">
       {comments.map((comment) => {
-        const isOwner = comment.user_id.toString() === currentUserId;
+        const isOwner = Number(comment.user_id) === currentUserIdNumber;
         const isDeleting = deletingId === comment.id;
 
         return (
