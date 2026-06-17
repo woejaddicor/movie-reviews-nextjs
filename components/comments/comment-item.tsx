@@ -2,6 +2,7 @@
 
 import { CommentWithUser } from "@/lib/types";
 import UserAvatar from "@/components/ui/user-avatar";
+import Link from "next/link";
 
 interface CommentItemProps {
   comment: CommentWithUser;
@@ -19,17 +20,21 @@ export default function CommentItem({
   return (
     <div className="card-hover p-6">
       <div className="flex items-start gap-4">
-        <UserAvatar
-          name={comment.user_name}
-          email={comment.user_email}
-          size="md"
-        />
+        <Link href={`/users/${comment.user_id}`}>
+          <UserAvatar
+            name={comment.user_name}
+            email={comment.user_email}
+            size="md"
+          />
+        </Link>
 
         <div className="flex-1 min-w-0">
           <div className="flex items-center justify-between mb-2">
             <div>
               <p className="font-semibold">
-                {comment.user_name || "Anonymous"}
+                <Link href={`/profile/${comment.user_id}`} className="text-inherit no-underline">
+                  {comment.user_name || "Anonymous"}
+                </Link>
               </p>
               <p className="text-xs text-white/50">
                 {new Date(comment.created_at * 1000).toLocaleDateString(
@@ -49,7 +54,7 @@ export default function CommentItem({
               <button
                 onClick={() => onDelete(comment.id)}
                 disabled={isDeleting}
-                className="text-red-400 hover:text-red-300 text-sm font-medium disabled:opacity-50 transition-colors"
+                className="btn-warning-sm"
               >
                 {isDeleting ? "Deleting..." : "Delete"}
               </button>

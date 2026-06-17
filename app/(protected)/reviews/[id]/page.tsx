@@ -110,6 +110,7 @@ export default async function ReviewDetailPage({
             movieYear={review.movie_year ?? undefined}
             rating={review.rating}
             userName={review.user_name}
+            userId={review.user_id}
             userEmail={review.user_email}
             createdAt={review.created_at}
           />

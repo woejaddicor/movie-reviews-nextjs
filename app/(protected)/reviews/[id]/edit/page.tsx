@@ -58,7 +58,7 @@ export default async function EditReviewPage({
     <div className="max-w-3xl mx-auto p-8">
       <h1 className="text-4xl font-bold mb-8">Edit Review</h1>
       <div className="card">
-        <ReviewForm review={review} />
+        <ReviewForm review={data.review} />
       </div>
     </div>
   );

@@ -1,4 +1,5 @@
 import UserAvatar from "@/components/ui/user-avatar";
+import Link from "next/link";
 import RatingBadge from "@/components/ui/rating-badge";
 
 interface ReviewHeaderProps {
@@ -6,6 +7,7 @@ interface ReviewHeaderProps {
   movieYear?: number;
   rating: number;
   userName?: string | null;
+  userId?: number;
   userEmail: string;
   createdAt: number;
 }
@@ -17,6 +19,7 @@ export default function ReviewHeader({
   userName,
   userEmail,
   createdAt,
+  userId,
 }: ReviewHeaderProps) {
   return (
     <>
@@ -40,7 +43,13 @@ export default function ReviewHeader({
         <UserAvatar name={userName} email={userEmail} size="lg" />
         <div>
           <p className="font-semibold [html[data-theme='light']_&]:text-gray-900">
-            {userName || "Anonymous"}
+            {userId ? (
+              <Link href={`/profile/${userId}`} className="text-inherit no-underline">
+                {userName || "Anonymous"}
+              </Link>
+            ) : (
+              (userName || "Anonymous")
+            )}
           </p>
           <p className="text-sm text-white/50 [html[data-theme='light']_&]:text-gray-600">
             {new Date(createdAt * 1000).toLocaleDateString("en-US", {

@@ -35,7 +35,12 @@ export default async function ProfilePage() {
     return redirect("/");
   }
 
-  const user = data.me;
+  const user = {
+    ...data.me,
+    name: data.me.name ?? "",
+    bio: data.me.bio ?? "",
+    avatar: data.me.avatar ?? "",
+  };
 
   return (
     <div className="max-w-3xl mx-auto p-8">
