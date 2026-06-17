@@ -1,7 +1,9 @@
 import { notFound } from "next/navigation";
 import { getUserById } from "@/lib/user";
 import { getReviewsByUserId } from "@/lib/reviews";
+import { getRatedReviewsByUserId } from "@/lib/ratings";
 import ReviewList from "@/components/reviews/review-list";
+import ProfileReviewTabs from "@/components/profile/review-tabs";
 import UserAvatar from "@/components/ui/user-avatar";
 import { formatDateTimestamp } from "@/lib/format";
 
@@ -10,6 +12,7 @@ export default async function ProfilePage({ params }: { params: { id: string } }
   if (!user) return notFound();
 
   const reviews = getReviewsByUserId(user.id);
+  const ratedReviews = getRatedReviewsByUserId(user.id);
 
   return (
     <div className="max-w-6xl mx-auto p-8">
@@ -28,8 +31,7 @@ export default async function ProfilePage({ params }: { params: { id: string } }
         </div>
       </div>
 
-      <h2 className="text-2xl font-semibold mb-6">Films reviewed</h2>
-      <ReviewList reviews={reviews} />
+      <ProfileReviewTabs reviewedReviews={reviews} ratedReviews={ratedReviews} />
     </div>
   );
 }
