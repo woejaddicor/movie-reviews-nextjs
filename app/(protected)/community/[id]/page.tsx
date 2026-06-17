@@ -5,6 +5,7 @@ import CommentSection from "@/components/comment-section";
 import MoviePoster from "@/components/ui/movie-poster";
 import ReviewHeader from "@/components/reviews/review-header";
 import ReviewActions from "@/components/reviews/review-actions";
+import UserRatingPanel from "@/components/reviews/user-rating-panel";
 import Link from "next/link";
 
 export default async function ReviewDetailPage({
@@ -38,6 +39,15 @@ export default async function ReviewDetailPage({
       user_email: string;
       user_avatar: string | null;
     } | null;
+    myUserRating: {
+      id: number;
+      review_id: number;
+      user_id: number;
+      rating: number;
+      rating_text: string | null;
+      created_at: number;
+      updated_at: number;
+    } | null;
     commentsByReview: Array<{
       id: number;
       review_id: number;
@@ -64,6 +74,15 @@ export default async function ReviewDetailPage({
         user_email
         user_avatar
       }
+      myUserRating(reviewId: $id) {
+        id
+        review_id
+        user_id
+        rating
+        rating_text
+        created_at
+        updated_at
+      }
       commentsByReview(reviewId: $reviewId) {
         id
         review_id
@@ -84,15 +103,16 @@ export default async function ReviewDetailPage({
 
   const review = data.review;
   const comments = data.commentsByReview;
+  const personalRating = data.myUserRating;
   const isOwner = parseInt(session.user.id) === review.user_id;
 
   return (
     <div className="max-w-5xl mx-auto p-8">
       <Link
-        href="/reviews"
+        href="/community"
         className="inline-flex items-center text-green-400 [html[data-theme='light']_&]:text-green-600 hover:text-green-300 [html[data-theme='light']_&]:hover:text-green-700 mb-6 transition-colors font-medium"
       >
-        ← Back to Reviews
+        ← Back to Community
       </Link>
 
       <div className="bg-black/40 [html[data-theme='light']_&]:bg-white border border-white/10 [html[data-theme='light']_&]:border-gray-200 rounded-2xl overflow-hidden mb-8 [html[data-theme='light']_&]:shadow-lg">
@@ -124,6 +144,14 @@ export default async function ReviewDetailPage({
           {isOwner && <ReviewActions reviewId={review.id} />}
         </div>
       </div>
+
+      {!isOwner && (
+        <UserRatingPanel
+          reviewId={reviewId}
+          initialRating={personalRating?.rating ?? null}
+          initialText={personalRating?.rating_text ?? null}
+        />
+      )}
 
       <CommentSection
         reviewId={reviewId}

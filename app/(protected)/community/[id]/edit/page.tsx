@@ -51,7 +51,7 @@ export default async function EditReviewPage({
   }
 
   if (parseInt(session.user.id) !== data.review.user_id) {
-    return redirect(`/reviews/${reviewId}`);
+    return redirect(`/community/${reviewId}`);
   }
 
   return (

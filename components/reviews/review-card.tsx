@@ -8,17 +8,23 @@ import { formatDateTimestamp } from "@/lib/format";
 interface ReviewCardProps {
   review: MovieReviewWithUser;
   isOwner?: boolean;
+  isRatedByCurrentUser?: boolean;
 }
 
-export default function ReviewCard({ review, isOwner }: ReviewCardProps) {
+export default function ReviewCard({ review, isOwner, isRatedByCurrentUser }: ReviewCardProps) {
   return (
     <Link
-      href={`/reviews/${review.id}`}
+      href={`/community/${review.id}`}
       className="bg-black/40 [html[data-theme='light']_&]:bg-white border border-white/10 [html[data-theme='light']_&]:border-gray-200 rounded-2xl overflow-hidden hover:bg-black/60 [html[data-theme='light']_&]:hover:bg-gray-50 hover:border-green-600/50 [html[data-theme='light']_&]:hover:border-green-500 transition-all hover:scale-[1.02] [html[data-theme='light']_&]:shadow-md [html[data-theme='light']_&]:hover:shadow-lg group relative"
     >
       {isOwner && (
         <div className="absolute top-3 right-3 bg-green-600 text-white text-xs px-2 py-1 rounded-full font-semibold z-10 shadow-md">
           Your Review
+        </div>
+      )}
+      {!isOwner && isRatedByCurrentUser && (
+        <div className="absolute top-3 right-3 bg-blue-600 text-white text-xs px-2 py-1 rounded-full font-semibold z-10 shadow-md">
+          Rated by You
         </div>
       )}
 
@@ -35,8 +41,11 @@ export default function ReviewCard({ review, isOwner }: ReviewCardProps) {
           <h2 className="text-xl font-bold flex-1 group-hover:text-green-400 [html[data-theme='light']_&]:text-gray-900 [html[data-theme='light']_&]:group-hover:text-green-600 transition-colors">
             {review.movie_title}
           </h2>
-          <div className="ml-2">
+          <div className="ml-2 flex flex-col items-end">
             <RatingBadge rating={review.rating} size="sm" />
+            {typeof review.average_rating === 'number' && (
+              <span className="text-xs text-white/60 [html[data-theme='light']_&]:text-gray-600">Avg: {Number(review.average_rating).toFixed(1)}</span>
+            )}
           </div>
         </div>
 

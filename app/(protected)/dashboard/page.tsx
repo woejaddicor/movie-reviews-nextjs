@@ -55,9 +55,37 @@ export default async function DashboardPage() {
       user_email: string;
       user_avatar: string | null;
     }>;
+    reviewsRatedByUser: Array<{
+      id: number;
+      user_id: number;
+      movie_title: string;
+      movie_year: number | null;
+      movie_poster: string | null;
+      rating: number;
+      review_text: string;
+      created_at: number;
+      updated_at: number;
+      user_name: string | null;
+      user_email: string;
+      user_avatar: string | null;
+    }>;
   }>(
     `query ReviewsByUser($userId: Int!) {
       reviewsByUser(userId: $userId) {
+        id
+        user_id
+        movie_title
+        movie_year
+        movie_poster
+        rating
+        review_text
+        created_at
+        updated_at
+        user_name
+        user_email
+        user_avatar
+      }
+      reviewsRatedByUser(userId: $userId) {
         id
         user_id
         movie_title
@@ -75,7 +103,21 @@ export default async function DashboardPage() {
     { userId: parseInt(result.user.id) },
   );
 
-  const userReviews = reviewData.reviewsByUser;
+  const authoredReviews = reviewData.reviewsByUser;
+  const ratedReviews = reviewData.reviewsRatedByUser;
+  const authoredReviewItems = authoredReviews.map((review) => ({
+    review,
+    badge: "your-review" as const,
+  }));
+  const ratedReviewItems = ratedReviews
+    .filter((review) => !authoredReviews.some((authReview) => authReview.id === review.id))
+    .map((review) => ({
+      review,
+      badge: "rated-by-you" as const,
+    }));
+
+  const userReviewItems = [...authoredReviewItems, ...ratedReviewItems];
+  const userReviews = userReviewItems.map((item) => item.review);
 
   return (
     <div className="max-w-6xl mx-auto p-8">
@@ -125,22 +167,22 @@ export default async function DashboardPage() {
           <h2 className="text-2xl font-bold [html[data-theme='light']_&]:text-gray-900">
             Your Reviews
           </h2>
-          <Link href="/reviews/new" className="btn-primary-sm">
+          <Link href="/community/new" className="btn-primary-sm">
             Write New Review
           </Link>
         </div>
 
-        {userReviews.length === 0 ? (
+        {userReviewItems.length === 0 ? (
           <EmptyState
             title="No reviews yet"
             message="You haven't written any reviews yet."
             actionLabel="Write Your First Review"
-            actionHref="/reviews/new"
+            actionHref="/community/new"
           />
         ) : (
           <div className="space-y-4">
-            {userReviews.map((review) => (
-              <ReviewListItem key={review.id} review={review} />
+            {userReviewItems.map(({ review, badge }) => (
+              <ReviewListItem key={review.id} review={review} badge={badge} />
             ))}
           </div>
         )}

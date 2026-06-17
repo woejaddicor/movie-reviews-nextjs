@@ -15,6 +15,13 @@ import {
   deleteComment,
 } from "./comments";
 import { getUserById, updateUserProfile } from "./user";
+import {
+  getUserRating,
+  upsertUserRating,
+  getAverageRating,
+  getUserRatingsByUserId,
+  getRatedReviewsByUserId,
+} from "./ratings";
 
 export const schema: GraphQLSchema = buildSchema(`
   type User {
@@ -51,6 +58,7 @@ export const schema: GraphQLSchema = buildSchema(`
     user_name: String
     user_email: String!
     user_avatar: String
+    average_rating: Float
   }
 
   type Comment {
@@ -64,11 +72,24 @@ export const schema: GraphQLSchema = buildSchema(`
     user_avatar: String
   }
 
+  type UserRating {
+    id: Int!
+    review_id: Int!
+    user_id: Int!
+    rating: Int!
+    rating_text: String
+    created_at: Int!
+    updated_at: Int!
+  }
+
   type Query {
     review(id: Int!): MovieReviewWithUser
     reviews(limit: Int, offset: Int): [MovieReviewWithUser!]!
     reviewsByUser(userId: Int!): [MovieReviewWithUser!]!
+    reviewsRatedByUser(userId: Int!): [MovieReviewWithUser!]!
     searchReviews(query: String!): [MovieReviewWithUser!]!
+    userRating(reviewId: Int!, userId: Int!): Int
+    myUserRating(reviewId: Int!): UserRating
     commentsByReview(reviewId: Int!): [Comment!]!
     me: User
   }
@@ -107,21 +128,52 @@ export const schema: GraphQLSchema = buildSchema(`
     createComment(input: CreateCommentInput!): Comment!
     deleteComment(id: Int!): Boolean!
     updateProfile(input: UpdateProfileInput!): Boolean!
+    upsertUserRating(reviewId: Int!, rating: Int!, ratingText: String): UserRating!
   }
 `);
 
 export const rootValue = {
-  review: ({ id }: { id: number }) => getReviewWithUser(id),
   reviews: ({ limit, offset }: { limit?: number; offset?: number }) =>
-    getAllReviews(limit ?? 50, offset ?? 0),
-  reviewsByUser: ({ userId }: { userId: number }) => getReviewsByUserId(userId),
+    getAllReviews(limit ?? 50, offset ?? 0).map((r: any) => ({
+      ...r,
+      average_rating: getAverageRating(r.id).average,
+    })),
+  review: ({ id }: { id: number }) => {
+    const r = getReviewWithUser(id);
+    if (!r) return null;
+    return { ...r, average_rating: getAverageRating(r.id).average };
+  },
+  reviewsByUser: ({ userId }: { userId: number }) =>
+    getReviewsByUserId(userId).map((r: any) => ({
+      ...r,
+      average_rating: getAverageRating(r.id).average,
+    })),
+  reviewsRatedByUser: ({ userId }: { userId: number }) =>
+    getRatedReviewsByUserId(userId).map((r: any) => ({
+      ...r,
+      average_rating: getAverageRating(r.id).average,
+    })),
   searchReviews: ({ query }: { query: string }) => searchReviews(query),
+  userRating: ({ reviewId, userId }: { reviewId: number; userId: number }) => {
+    const r = getUserRating(reviewId, userId);
+    return r ? r.rating : null;
+  },
+  myUserRating: async ({ reviewId }: { reviewId: number }) => {
+    const session = await verifyAuthSession();
+    if (!session.user) return null;
+    return getUserRating(reviewId, parseInt(session.user.id));
+  },
   commentsByReview: ({ reviewId }: { reviewId: number }) =>
     getCommentsByReviewId(reviewId),
   me: async () => {
     const session = await verifyAuthSession();
     if (!session.user) return null;
     return getUserById(parseInt(session.user.id));
+  },
+  upsertUserRating: async ({ reviewId, rating, ratingText }: { reviewId: number; rating: number; ratingText?: string }) => {
+    const session = await verifyAuthSession();
+    if (!session.user) throw new Error("Unauthorized");
+    return upsertUserRating(reviewId, parseInt(session.user.id), rating, ratingText);
   },
   createReview: async ({ input }: any) => {
     const session = await verifyAuthSession();

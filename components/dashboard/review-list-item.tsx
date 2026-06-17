@@ -5,13 +5,14 @@ import { formatDateTimestamp } from "@/lib/format";
 
 interface ReviewListItemProps {
   review: MovieReview;
+  badge?: "your-review" | "rated-by-you";
 }
 
-export default function ReviewListItem({ review }: ReviewListItemProps) {
+export default function ReviewListItem({ review, badge }: ReviewListItemProps) {
   return (
     <Link
-      href={`/reviews/${review.id}`}
-      className="card-hover flex items-start gap-4 p-4 group"
+      href={`/community/${review.id}`}
+      className="card-hover flex items-start gap-4 p-4 group relative"
     >
       {review.movie_poster && (
         <img
@@ -23,9 +24,20 @@ export default function ReviewListItem({ review }: ReviewListItemProps) {
       <div className="flex-1 min-w-0">
         <div className="flex items-start justify-between mb-2">
           <div className="flex-1">
-            <h3 className="text-lg font-bold group-hover:text-green-400 [html[data-theme='light']_&]:text-gray-900 [html[data-theme='light']_&]:group-hover:text-green-600 transition-colors">
-              {review.movie_title}
-            </h3>
+            <div className="flex items-center gap-2 mb-1">
+              <h3 className="text-lg font-bold group-hover:text-green-400 [html[data-theme='light']_&]:text-gray-900 [html[data-theme='light']_&]:group-hover:text-green-600 transition-colors">
+                {review.movie_title}
+              </h3>
+              {badge === "your-review" ? (
+                <span className="inline-flex items-center rounded-full bg-green-600 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.2em] text-white">
+                  Your Review
+                </span>
+              ) : badge === "rated-by-you" ? (
+                <span className="inline-flex items-center rounded-full bg-blue-600 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.2em] text-white">
+                  Rated by You
+                </span>
+              ) : null}
+            </div>
             {review.movie_year && (
               <p className="text-sm text-white/50 [html[data-theme='light']_&]:text-gray-600">
                 {review.movie_year}

@@ -33,7 +33,7 @@ export default function ReviewForm({ review }: ReviewFormProps) {
             review_text: form.review_text,
           },
         });
-        router.push(`/reviews/${review.id}`);
+        router.push(`/community/${review.id}`);
         return;
       }
 
@@ -50,7 +50,7 @@ export default function ReviewForm({ review }: ReviewFormProps) {
           review_text: form.review_text,
         },
       });
-      router.push(`/reviews/${createData.createReview.id}`);
+      router.push(`/community/${createData.createReview.id}`);
     } catch (e) {
       setError((e as Error).message || "An unexpected error occurred");
     } finally {

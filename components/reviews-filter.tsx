@@ -35,7 +35,7 @@ export default function ReviewsFilter({
             mineCount={myReviews.length}
             onFilterChange={setFilter}
           />
-          <Link href="/reviews/new" className="btn-primary">
+          <Link href="/community/new" className="btn-primary">
             Write Review
           </Link>
         </div>
@@ -52,7 +52,7 @@ export default function ReviewsFilter({
           actionLabel={
             filter === "mine" ? "Write Your First Review" : "Write First Review"
           }
-          actionHref="/reviews/new"
+          actionHref="/community/new"
         />
       ) : (
         <ReviewList reviews={reviews} currentUserId={currentUserId} />

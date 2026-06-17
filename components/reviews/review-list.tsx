@@ -17,7 +17,14 @@ export default function ReviewList({
           ? parseInt(currentUserId) === review.user_id
           : false;
 
-        return <ReviewCard key={review.id} review={review} isOwner={isOwner} />;
+        return (
+          <ReviewCard
+            key={review.id}
+            review={review}
+            isOwner={isOwner}
+            isRatedByCurrentUser={!isOwner && review.is_rated_by_current_user}
+          />
+        );
       })}
     </div>
   );

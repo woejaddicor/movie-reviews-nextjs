@@ -79,6 +79,28 @@ db.exec(`
   );
 `);
 
+// Create per-user ratings table
+ db.exec(`
+   CREATE TABLE IF NOT EXISTS user_ratings (
+     id INTEGER PRIMARY KEY AUTOINCREMENT,
+     review_id INTEGER NOT NULL,
+     user_id INTEGER NOT NULL,
+     rating INTEGER NOT NULL CHECK(rating >= 1 AND rating <= 10),
+     rating_text TEXT,
+     created_at INTEGER DEFAULT (strftime('%s', 'now')),
+     updated_at INTEGER DEFAULT (strftime('%s', 'now')),
+     UNIQUE (review_id, user_id),
+     FOREIGN KEY (review_id) REFERENCES movie_reviews(id) ON DELETE CASCADE,
+     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+   );
+ `);
+
+try {
+  db.exec(`ALTER TABLE user_ratings ADD COLUMN rating_text TEXT`);
+} catch (e) {
+  // Column already exists or table not yet created
+}
+
 // Create indexes for better query performance
 db.exec(
   `CREATE INDEX IF NOT EXISTS idx_reviews_user ON movie_reviews(user_id)`,
@@ -90,5 +112,7 @@ db.exec(
   `CREATE INDEX IF NOT EXISTS idx_comments_review ON comments(review_id)`,
 );
 db.exec(`CREATE INDEX IF NOT EXISTS idx_comments_user ON comments(user_id)`);
+db.exec(`CREATE INDEX IF NOT EXISTS idx_user_ratings_review ON user_ratings(review_id)`);
+db.exec(`CREATE INDEX IF NOT EXISTS idx_user_ratings_user ON user_ratings(user_id)`);
 
 export default db;

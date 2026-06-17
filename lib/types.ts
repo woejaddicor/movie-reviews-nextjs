@@ -56,6 +56,9 @@ export interface MovieReviewWithUser extends MovieReview {
   user_name: string | null;
   user_email: string;
   user_avatar: string | null;
+  average_rating?: number | null;
+  user_rating?: number | null;
+  is_rated_by_current_user?: boolean;
 }
 
 export interface Comment {
@@ -78,4 +81,14 @@ export interface CreateReviewData {
   movie_poster?: string;
   rating: number;
   review_text: string;
+}
+
+export interface UserRating {
+  id: number;
+  review_id: number;
+  user_id: number;
+  rating: number;
+  rating_text: string | null;
+  created_at: number;
+  updated_at: number;
 }
