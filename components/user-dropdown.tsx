@@ -41,7 +41,7 @@ export default function UserDropdown({ user }: UserDropdownProps) {
       </button>
 
       {isOpen && (
-        <div className="absolute right-0 top-full mt-0 bg-black/40 [html[data-theme='light']_&]:bg-white backdrop-blur-sm border border-white/10 [html[data-theme='light']_&]:border-gray-300 rounded-xl w-60 shadow-xl z-50 overflow-hidden">
+        <div className="absolute right-0 top-full mt-0 bg-black/90 [html[data-theme='light']_&]:bg-white shadow-[0_20px_60px_rgba(0,0,0,0.25)] border border-white/15 [html[data-theme='light']_&]:border-gray-200 rounded-xl w-60 shadow-xl z-50 overflow-hidden">
           <div className="block px-4 py-3 text-white [html[data-theme='light']_&]:text-gray-800 no-underline hover:bg-white/10 [html[data-theme='light']_&]:hover:bg-gray-100 border-b border-white/10 [html[data-theme='light']_&]:border-gray-200 transition-all">
             <p className="font-semibold text-white [html[data-theme='light']_&]:text-gray-900 mb-1 truncate">
               {(user && user.name) || "No name set"}

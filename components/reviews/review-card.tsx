@@ -36,7 +36,7 @@ export default function ReviewCard({ review, isOwner }: ReviewCardProps) {
             {review.movie_title}
           </h2>
           <div className="ml-2">
-            <RatingBadge rating={review.rating}  size="sm" />
+            <RatingBadge rating={review.rating} size="sm" />
           </div>
         </div>
 
